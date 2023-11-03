@@ -1,0 +1,7 @@
+---
+- name: Terraforming with Ansible
+  hosts: all
+
+  tasks:
+    cloud.terraform:
+
