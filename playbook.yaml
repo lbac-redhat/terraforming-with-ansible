@@ -3,5 +3,8 @@
   hosts: all
 
   tasks:
-    cloud.terraform:
-
+    - name: Run terraform
+      cloud.terraform.terraform:
+        project_path: "{{ playbook_dir }}/terraform/"
+        state: present
+        force_init: true
