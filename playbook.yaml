@@ -3,18 +3,14 @@
   hosts: all
 
   tasks:
-    - name: Find out playbook's path
-      shell: pwd
-      register: playbook_path_output
-    - debug: var=playbook_path_output.stdout
-            
-    - name: Find out playbook's dir contents
-      shell: "ls -lah"
-      register: playbook_path_output
-    - debug: var=playbook_path_output.stdout
+    - name: Clone a github repository
+      ansible.builtin.git:
+        repo: https://github.com/lbac-redhat/terraforming-with-ansible.git
+        dest: repo
+        clone: true
 
     - name: Run terraform
       cloud.terraform.terraform:
-        project_path: "{{ playbook_dir }}/terraform/"
+        project_path: repo/terraform
         state: present
         force_init: true
