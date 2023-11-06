@@ -59,9 +59,6 @@
       register: apply_status
 
     - name: Read outputs from project path
-      environment:
-        AWS_ACCESS_KEY_ID: "{{ vault.s3.access_key_id }}"
-        AWS_SECRET_ACCESS_KEY: "{{ vault.s3.secret_access_key }}"
       cloud.terraform.terraform_output:
         project_path: repo/terraform
       register: tf_output
