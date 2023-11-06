@@ -47,4 +47,9 @@ resource "libvirt_domain" "tf_vms" {
   disk {
     volume_id = libvirt_volume.tf_volumes[each.key].id
   }
+  network_interface {
+    network_name = "default"
+    hostname     = each.key
+    wait_for_lease = true
+  }
 }
