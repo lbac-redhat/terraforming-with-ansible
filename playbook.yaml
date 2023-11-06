@@ -84,7 +84,7 @@
 
     - name: Commit the inventory to the local repository
       command:
-        cmd: "git -c user.name='{{ vault.git.username }}' -c user.email='{{ vault.git.email }}' commit -a -m 'Updating inventory'"
+        cmd: "git -c user.name='{{ vault.git.user }}' -c user.email='{{ vault.git.email }}' commit -a -m 'Updating inventory'"
         chdir: aap-inventory
       register: result
       failed_when: result.rc != 0 and "nothing to commit, working tree clean" not in result.stdout
