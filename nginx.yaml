@@ -38,4 +38,4 @@
       ansible.builtin.replace:
         path: /usr/share/nginx/html/index.html
         regexp: 'Red Hat Enterprise Linux <strong>Test Page<\/strong>'
-        replace: 'Ansible <3 Terraform'
+        replace: 'Ansible ❤️  Terraform'
