@@ -14,6 +14,8 @@
     - name: Subscribe machine
       no_log: true
       shell: "subscription-manager register --username {{ vault.rhsm.user}} --password {{ vault.rhsm.pass }}"
+      register: result
+      failed_when: result.rc != 0 and result.rc != 64
 
     - name: Ensure Nginx is installed
       ansible.builtin.package:
