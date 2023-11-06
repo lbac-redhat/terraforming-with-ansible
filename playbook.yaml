@@ -28,7 +28,7 @@
         project_path: repo/terraform
         state: planned
         plan_file: tf.plan
-          # force_init: true
+        force_init: true
         complex_vars: true
         variables: "{{ tf_vars }}"
       # check_mode: false
@@ -40,6 +40,9 @@
         msg: "{{ tf_plan.stdout_lines }}"
 
     - name: Execute plan
+      environment:
+        PGUSER: "{{ vault.pg.user }}"
+        PGPASSWORD: "{{ vault.pg.pass }}"
       cloud.terraform.terraform:
         project_path: repo/terraform
         state: present
