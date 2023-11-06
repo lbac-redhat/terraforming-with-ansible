@@ -25,7 +25,7 @@
         AWS_ACCESS_KEY_ID: "{{ vault.s3.access_key_id }}"
         AWS_SECRET_ACCESS_KEY: "{{ vault.s3.secret_access_key }}"
       cloud.terraform.terraform:
-        project_path: repo/terraform
+        project_path: ./repo/terraform
         state: planned
         plan_file: tf.plan
         force_init: true
