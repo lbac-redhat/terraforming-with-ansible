@@ -1,6 +1,15 @@
 ---
 - name: Terraforming with Ansible
   hosts: all
+  vars:
+    tf_vars:
+      machines:
+        machine1:
+          vCPUs: 2
+          memory: 1024
+        machine2:
+          vCPUs: 1
+          memory: 512
 
   tasks:
     - name: Clone a github repository
@@ -14,3 +23,5 @@
         project_path: repo/terraform
         state: present
         force_init: true
+        complex_vars: true
+        variables: "{{ tf_vars }}"

@@ -11,31 +11,15 @@ provider "libvirt" {
   uri = "qemu:///system"
 }
 
-locals {
-  machines = {
-
-    "machine1" = {
-      "vCPUs"  = 2,
-      "memory" = 1024
-    },
-
-    "machine2" = {
-      "vCPUs"  = 1,
-      "memory" = 512
-    }
-
-  }
-}
-
 resource "libvirt_volume" "tf_volumes" {
-  for_each = local.machines
+  for_each = var.machines
 
   name             = each.key
   base_volume_name = "rhel9.2-base.qcow2"
 }
 
 resource "libvirt_domain" "tf_vms" {
-  for_each = local.machines
+  for_each = var.machines
 
   name = each.key
   cpu {
