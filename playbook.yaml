@@ -1,6 +1,8 @@
 ---
 - name: Terraforming with Ansible
   hosts: all
+  vars_files:
+    - vault.yaml
   vars:
     tf_vars:
       machines:
@@ -12,21 +14,25 @@
           memory: 512
 
   tasks:
-    - name: Clone a github repository
+    - name: Clone the github repository
       ansible.builtin.git:
         repo: https://github.com/lbac-redhat/terraforming-with-ansible.git
         dest: repo
         clone: true
 
     - name: Run terraform plan
+      environment:
+        PGUSER: "{{ vault.pg.user }}"
+        PGPASSWORD: "{{ vault.pg.pass }}"
       cloud.terraform.terraform:
         project_path: repo/terraform
         state: planned
         plan_file: tf.plan
-        force_init: true
+          # force_init: true
         complex_vars: true
         variables: "{{ tf_vars }}"
       # check_mode: false
+      changed_when: false
       register: tf_plan
 
     - name: Print plan
@@ -38,3 +44,5 @@
         project_path: repo/terraform
         state: present
         plan_file: tf.plan
+      changed_when: '"Apply complete! Resources: 0 added, 0 changed, 0 destroyed." not in apply_status.stdout'
+      register: apply_status

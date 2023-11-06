@@ -1,4 +1,8 @@
 terraform {
+  backend "pg" {
+    conn_str = "postgres://aap.bac/terraform?sslmode=disable"
+  }
+
   required_providers {
     libvirt = {
       source  = "dmacvicar/libvirt"
