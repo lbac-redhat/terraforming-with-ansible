@@ -74,6 +74,7 @@
       ansible.builtin.git:
         repo: git@github.com:lbac-redhat/terraforming-with-ansible-inventory.git
         key_file: .ssh/id_ansible
+        accept_hostkey: true
         dest: aap-inventory
         clone: true
         force: true
