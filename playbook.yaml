@@ -21,6 +21,9 @@
         clone: true
 
     - name: Run terraform plan
+      environment:
+        AWS_ACCESS_KEY_ID: "{{ vault.s3.access_key_id }}"
+        AWS_SECRET_ACCESS_KEY: "{{ vault.s3.secret_access_key }}"
       cloud.terraform.terraform:
         project_path: repo/terraform
         state: planned
@@ -38,6 +41,9 @@
         msg: "{{ tf_plan.stdout_lines }}"
 
     - name: Execute plan
+      environment:
+        AWS_ACCESS_KEY_ID: "{{ vault.s3.access_key_id }}"
+        AWS_SECRET_ACCESS_KEY: "{{ vault.s3.secret_access_key }}"
       cloud.terraform.terraform:
         project_path: repo/terraform
         state: present

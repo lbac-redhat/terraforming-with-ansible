@@ -1,4 +1,10 @@
 terraform {
+  backend "s3" {
+    bucket = "terraform-luka"
+    key = "terraform.tfstate"
+    region = "eu-north-1"
+  }
+
   required_providers {
     libvirt = {
       source  = "dmacvicar/libvirt"
