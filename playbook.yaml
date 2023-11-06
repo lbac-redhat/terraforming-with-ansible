@@ -18,10 +18,23 @@
         dest: repo
         clone: true
 
-    - name: Run terraform
+    - name: Run terraform plan
       cloud.terraform.terraform:
         project_path: repo/terraform
-        state: present
+        state: planned
+        plan_file: tf.plan
         force_init: true
         complex_vars: true
         variables: "{{ tf_vars }}"
+      # check_mode: false
+      register: tf_plan
+
+    - name: Print plan
+      debug:
+        msg: "{{ tf_plan.stdout_lines }}"
+
+    - name: Execute plan
+      cloud.terraform.terraform:
+        project_path: repo/terraform
+        state: present
+        plan_file: tf.plan
