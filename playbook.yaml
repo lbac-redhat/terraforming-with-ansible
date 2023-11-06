@@ -19,6 +19,7 @@
         repo: https://github.com/lbac-redhat/terraforming-with-ansible.git
         dest: repo
         clone: true
+        force: true
 
     - name: Run terraform plan
       environment:
