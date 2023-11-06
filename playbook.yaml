@@ -47,7 +47,7 @@
       debug:
         msg: "{{ tf_plan.stdout_lines }}"
 
-    - name: Execute plan
+    - name: Apply plan
       environment:
         AWS_ACCESS_KEY_ID: "{{ vault.s3.access_key_id }}"
         AWS_SECRET_ACCESS_KEY: "{{ vault.s3.secret_access_key }}"
@@ -57,3 +57,32 @@
         plan_file: tf.plan
       changed_when: '"Apply complete! Resources: 0 added, 0 changed, 0 destroyed." not in apply_status.stdout'
       register: apply_status
+
+    - name: Read outputs from project path
+      environment:
+        AWS_ACCESS_KEY_ID: "{{ vault.s3.access_key_id }}"
+        AWS_SECRET_ACCESS_KEY: "{{ vault.s3.secret_access_key }}"
+      cloud.terraform.terraform_output:
+        project_path: repo/terraform
+      register: tf_output
+
+    - debug:
+       var: tf_output
+
+    - name: Write inventory
+      ansible.builtin.template:
+        src: templates/inventory.j2
+        dest: inventory
+
+          #    - name: Commit the inventory to the local repository
+          #      command:
+          #        cmd: "git -c user.name='{{ vault.git.username }}' -c user.email='{{ vault.git.email }}' commit -a -m 'Updating inventoryt '"
+          #      register: result
+          #      failed_when: result.rc != 0 and "nothing to commit, working tree clean" not in result.stdout
+          #      changed_when: '"nothing to commit, working tree clean" not in result.stdout'
+          #
+          #    - name: Push the inventory to the remote repository
+          #      command:
+          #        cmd: "git -c core.sshCommand='ssh -i .ssh/id_ansible -o IdentitiesOnly=yes' push"
+          #      register: result
+          #      changed_when: '"Everything up-to-date" not in result.stderr'
