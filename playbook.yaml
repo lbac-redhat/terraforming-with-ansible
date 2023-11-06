@@ -32,6 +32,12 @@
           # init_reconfigure: true
         complex_vars: true
         variables: "{{ tf_vars }}"
+        backend_config:
+          bucket: "terraform-luka"
+          key: "terraform.tfstate"
+          region: "eu-north-1"
+          dynamodb_table: "tf.kim"
+
       # check_mode: false
       changed_when: false
       register: tf_plan
