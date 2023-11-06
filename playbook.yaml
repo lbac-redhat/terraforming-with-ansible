@@ -92,7 +92,7 @@
 
     - name: Push the inventory to the remote repository
       command:
-        cmd: "git -c core.sshCommand='ssh -i ../.ssh/id_ansible -o IdentitiesOnly=yes' push"
+        cmd: "git -c core.sshCommand='ssh -i ../.ssh/id_ansible -o IdentitiesOnly=yes -o StrictHostKeyChecking=no' push"
         chdir: aap-inventory
       register: result
       changed_when: '"Everything up-to-date" not in result.stderr'
