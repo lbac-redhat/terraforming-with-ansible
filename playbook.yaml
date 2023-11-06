@@ -64,9 +64,16 @@
     - debug:
        var: tf_output
 
+    - name: Write SSH identity
+      ansible.builtin.copy:
+        content: "{{ vault.git.sshkey }}"
+        dest: .ssh/id_ansible
+        mode: 0600
+
     - name: Clone the inventory repository
       ansible.builtin.git:
-        repo: https://github.com/lbac-redhat/terraforming-with-ansible-state.git
+        repo: git@github.com:lbac-redhat/terraforming-with-ansible-inventory.git
+        key_file: .ssh/id_ansible
         dest: aap-inventory
         clone: true
         force: true
@@ -76,11 +83,6 @@
         src: templates/inventory.j2
         dest: aap-inventory/inventory
 
-    - name: Write SSH identity
-      ansible.builtin.copy:
-        content: "{{ vault.git.sshkey }}"
-        dest: .ssh/id_ansible
-        mode: 0600
 
     - name: Commit the inventory to the local repository
       command:
@@ -92,7 +94,7 @@
 
     - name: Push the inventory to the remote repository
       command:
-        cmd: "git -c core.sshCommand='ssh -i ../.ssh/id_ansible -o IdentitiesOnly=yes -o StrictHostKeyChecking=no' push"
+        cmd: "git -c core.sshCommand='ssh -i ../.ssh/id_ansible -o IdentitiesOnly=yes' push"
         chdir: aap-inventory
       register: result
       changed_when: '"Everything up-to-date" not in result.stderr'
