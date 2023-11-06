@@ -28,7 +28,7 @@
         project_path: repo/terraform
         state: planned
         plan_file: tf.plan
-        # force_init: true
+        force_init: true
         # init_reconfigure: true
         complex_vars: true
         variables: "{{ tf_vars }}"
