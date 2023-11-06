@@ -66,20 +66,35 @@
     - debug:
        var: tf_output
 
+    - name: Clone the inventory repository
+      ansible.builtin.git:
+        repo: https://github.com/lbac-redhat/terraforming-with-ansible-state.git
+        dest: aap-inventory
+        clone: true
+        force: true
+
     - name: Write inventory
       ansible.builtin.template:
         src: templates/inventory.j2
-        dest: inventory
+        dest: aap-inventory/inventory
 
-          #    - name: Commit the inventory to the local repository
-          #      command:
-          #        cmd: "git -c user.name='{{ vault.git.username }}' -c user.email='{{ vault.git.email }}' commit -a -m 'Updating inventoryt '"
-          #      register: result
-          #      failed_when: result.rc != 0 and "nothing to commit, working tree clean" not in result.stdout
-          #      changed_when: '"nothing to commit, working tree clean" not in result.stdout'
-          #
-          #    - name: Push the inventory to the remote repository
-          #      command:
-          #        cmd: "git -c core.sshCommand='ssh -i .ssh/id_ansible -o IdentitiesOnly=yes' push"
-          #      register: result
-          #      changed_when: '"Everything up-to-date" not in result.stderr'
+    - name: Write SSH identity
+      ansible.builtin.copy:
+        content: "{{ vault.git.sshkey }}"
+        dest: .ssh/id_ansible
+        mode: 0600
+
+    - name: Commit the inventory to the local repository
+      command:
+        cmd: "git -c user.name='{{ vault.git.username }}' -c user.email='{{ vault.git.email }}' commit -a -m 'Updating inventory'"
+        chdir: aap-inventory
+      register: result
+      failed_when: result.rc != 0 and "nothing to commit, working tree clean" not in result.stdout
+      changed_when: '"nothing to commit, working tree clean" not in result.stdout'
+
+    - name: Push the inventory to the remote repository
+      command:
+        cmd: "git -c core.sshCommand='ssh -i ../.ssh/id_ansible -o IdentitiesOnly=yes' push"
+        chdir: aap-inventory
+      register: result
+      changed_when: '"Everything up-to-date" not in result.stderr'
