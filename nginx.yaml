@@ -5,11 +5,15 @@
     - vault.yaml
 
   tasks:
+    #    - name: Subscribe machine
+    #      community.general.redhat_subscription:
+    #        state: present
+    #        username: "{{ vault.rhsm.user }}"
+    #        password: "{{ vault.rhsm.pass }}"
+
     - name: Subscribe machine
-      community.general.redhat_subscription:
-        state: present
-        username: "{{ vault.rhsm.user }}"
-        password: "{{ vault.rhsm.pass }}"
+      no_log: true
+      shell: "subscription-manager register --username {{ vault.rhsm.user}} --password {{ vault.rhsm.pass }}"
 
     - name: Ensure Nginx is installed
       ansible.builtin.package:
