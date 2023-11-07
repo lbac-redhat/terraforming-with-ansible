@@ -1,8 +1,8 @@
 terraform {
   backend "s3" {
-    bucket = "terraform-luka"
-    key = "terraform.tfstate"
-    region = "eu-north-1"
+    bucket         = "terraform-luka"
+    key            = "terraform.tfstate"
+    region         = "eu-north-1"
     dynamodb_table = "tf.kim"
   }
 
@@ -39,8 +39,8 @@ resource "libvirt_domain" "tf_vms" {
     volume_id = libvirt_volume.tf_volumes[each.key].id
   }
   network_interface {
-    network_name = "default"
-    hostname     = each.key
+    network_name   = "default"
+    hostname       = each.key
     wait_for_lease = true
   }
 }
