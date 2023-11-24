@@ -1,10 +1,13 @@
 terraform {
-  backend "s3" {
-    bucket         = "terraform-luka"
-    key            = "terraform.tfstate"
-    region         = "eu-north-1"
-    dynamodb_table = "tf.kim"
+  backend "pg" {
   }
+
+  # backend "s3" {
+  #   bucket         = "terraform-luka"
+  #   key            = "terraform.tfstate"
+  #   region         = "eu-north-1"
+  #   dynamodb_table = "tf.kim"
+  # }
 
   required_providers {
     libvirt = {

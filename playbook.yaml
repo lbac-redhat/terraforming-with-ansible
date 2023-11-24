@@ -5,8 +5,11 @@
     - vault.yaml
 
   environment:
-    AWS_ACCESS_KEY_ID: "{{ vault.s3.access_key_id }}"
-    AWS_SECRET_ACCESS_KEY: "{{ vault.s3.secret_access_key }}"
+    # AWS_ACCESS_KEY_ID: "{{ vault.s3.access_key_id }}"
+    # AWS_SECRET_ACCESS_KEY: "{{ vault.s3.secret_access_key }}"
+    PG_CONN_STRING: "postgres://{{ vault.pgsql.url }}/{{ vault.pgsql.db }}{{ vault.pgsql.options }}"
+    PGUSER: "{{ vault.pgsql.user }}"
+    PGPASSWORD: "{{ vault.pgsql.password }}"
 
   tasks:
     - name: Clone the github repository
@@ -25,11 +28,11 @@
           # init_reconfigure: true
         complex_vars: true
         variables: "{{ tf_vars }}"
-        backend_config:
-          bucket: "terraform-luka"
-          key: "terraform.tfstate"
-          region: "eu-north-1"
-          dynamodb_table: "tf.kim"
+          #        backend_config:
+          #          bucket: "terraform-luka"
+          #          key: "terraform.tfstate"
+          #          region: "eu-north-1"
+          #          dynamodb_table: "tf.kim"
 
       # check_mode: false
       changed_when: false
